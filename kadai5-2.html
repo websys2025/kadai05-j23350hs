@@ -1,20 +1,47 @@
+<!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="utf-8">
     <title>演習課題5-2：外部APIの呼び出しテスト</title>
 </head>
 <body>
-    <h1 id="msg">何かのAPI</h1>
+    <h1 id="msg">国情報検索API</h1>
     <form name="apiform"><p>
-        何かのフォーム：<input type="text" name="form_data">
+        国名を入力してください：<input type="text" name="form_data">
         <button type="button" id="btn1" onclick="some_api(this.form)">実行</button>
     </p></form>
     
-    <div id="result"></div>
+    <div id="result">結果はここに表示</div>
     <script>
         async function some_api(myForm) {
             // ここにコードを書く
-            document.getElementById("result").innerHTML += myForm.form_data.value+"<br />";
+            const countryName = myForm.form_data.value.trim();
+            if (!countryName) {
+                document.getElementById("result").innerHTML = "英語で国名を入力してください。";
+                return;
+            }
+
+            try {
+                const response = await fetch(`https://restcountries.com/v3.1/name/${encodeURIComponent(countryName)}?fullText=true`);
+                if (!response.ok) throw new Error("取得できませんでした");
+
+                const data = await response.json();
+                const country = data[0];
+
+                const resultHtml = `
+                    <h2>${country.name.common}（${country.name.official}）</h2>
+                    <p>首都: ${country.capital ? country.capital[0] : "不明"}</p>
+                    <p>人口: ${country.population.toLocaleString()}人</p>
+                    <p>地域: ${country.region}</p>
+                    <p>国旗: <img src="${country.flags.png}" alt="国旗" width="200"></p>
+                `;
+
+                document.getElementById("result").innerHTML = resultHtml;
+            } catch (error) {
+                document.getElementById("result").innerHTML = "情報の取得ができませんでした。";
+                console.error(error);
+            }
+
             document.apiform.reset();
         }
     </script>
