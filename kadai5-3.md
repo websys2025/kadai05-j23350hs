@@ -16,7 +16,7 @@
 
 * リクエストとレスポンスのフォーマット
 * このAPIのリクエストは、URLのサイトの入力欄に調べたい国名を英語で入力すると、
-*flags.pngに国旗、regionに地域名、name.commonに一般的な国名、name.officialに正式名称、capitalに首都、populationにその国の人口を表示してくれます。
+flags.pngに国旗、regionに地域名、name.commonに一般的な国名、name.officialに正式名称、capitalに首都、populationにその国の人口を表示してくれます。
 
 ### Q3-3. 感想
 * 今回の課題で苦労したこと
